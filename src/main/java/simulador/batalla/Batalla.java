@@ -1,53 +1,36 @@
 package simulador.batalla;
 
+import simulador.pokemon.Pokemon;
+import java.util.Scanner;
+
 public class Batalla {
-    private final String name;
-    private int health = 400; // 400
-    private final int attackPower;  // El poder de ataque del pokemon
-    private final String type;
+    public void iniciarBatalla(Pokemon pokemon1, Pokemon pokemon2) {
+        System.out.println("Comienza la batalla entre " + pokemon1.getNombre() + " y " + pokemon2.getNombre() + "!");
 
-    public Batalla (String name, String type, int attackPower) {
-        this.name = name;
-        this.type = type;
-        this.attackPower = attackPower;
-    }
+        Scanner sc = new Scanner(System.in);
 
-    // Metodo lanza
-    public int rangedAttack() {
-        int damage = (int) (attackPower * 0.9); // El ataque a distancia hace 10% menos de dano
-        System.out.println(name + " lanza un ataque de " + type + " a distancia y causa " + damage + " puntos de dano!");
-        return damage;
-    }
+        while (pokemon1.getVida() > 0 && pokemon2.getVida() > 0) {
+            System.out.println("\nTurno de " + pokemon1.getNombre());
+            System.out.print("Elige un movimiento (Z: Golpe, X: Super Poder): ");
+            char tecla = sc.next().toUpperCase().charAt(0);
+            pokemon1.atacar(pokemon2, tecla);
+            System.out.println(pokemon2.getNombre() + " tiene " + pokemon2.getVida() + " puntos de vida restantes.");
 
-    // Metodo PUNÑO
-    public int normalAttack() {
-        System.out.println(name + " lanza un ataque normal y causa " + attackPower + " puntos de dano!");
-        return attackPower;
-    }
+            if (pokemon2.getVida() <= 0) {
+                System.out.println("\n" + pokemon2.getNombre() + " ha sido derrotado.");
+                System.out.println(pokemon1.getNombre() + " es el ganador.");
+                break;
+            }
 
-    // Metodo ESCUDO
-    public double activateShield() {
-        System.out.println(name + " activa un escudo y recibira 15% menos de dano!");
-        return 0.85; // El escudo reduce el dano recibido en un 15%
-    }
+            System.out.println("\nTurno de " + pokemon2.getNombre());
+            pokemon2.atacar(pokemon1, 'Z');
+            System.out.println(pokemon1.getNombre() + " tiene " + pokemon1.getVida() + " puntos de vida restantes.");
 
-    // Metodo Danio
-    public void receiveDamage(int damage, boolean shieldActive) {
-        if (shieldActive) {
-            damage = (int) (damage * 0.85); // Escudo
+            if (pokemon1.getVida() <= 0) {
+                System.out.println("\n" + pokemon1.getNombre() + " ha sido derrotado.");
+                System.out.println(pokemon2.getNombre() + " es el ganador.");
+                break;
+            }
         }
-        health -= damage;
-        if (health < 0) health = 0;
-        System.out.println(name + " ahora tiene " + health + " puntos de vida.");
-    }
-
-    // Muere Pokemon
-    public boolean isKO() {
-        return health <= 0;
-    }
-
-    public String getName() {
-        return name;
     }
 }
-
