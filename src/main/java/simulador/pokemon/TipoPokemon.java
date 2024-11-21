@@ -15,5 +15,9 @@ public enum TipoPokemon {
         ventajas.put(ELECTRICO, AGUA);   
         ventajas.put(HIELO, PLANTA);    
     }
+   public boolean esFuerteContra(TipoPokemon otroTipo) {
+        return ventajas.containsKey(this) && ventajas.get(this) == otroTipo;
+    }
 }
+
  
